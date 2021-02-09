@@ -57,17 +57,70 @@ class App extends Component {
     }
     return (
       <div className="App">
-        <h1>Good to Go!</h1>
-        <p>Your Truffle Box is installed and ready.</p>
-        <h2>Smart Contract Example</h2>
-        <p>
-          If your contracts compiled and migrated successfully, below will show
-          a stored value of 5 (by default).
-        </p>
-        <p>
-          Try changing the value stored on <strong>line 40</strong> of App.js.
-        </p>
-        <div>The stored value is: {this.state.storageValue}</div>
+        <section className="hero">
+          <div className="navbar">
+            <h1>Fearless Minter</h1> 
+            <img id="gasimage" src="./gas.png" ></img>
+          </div>
+          <div className="landing">
+            <div className="landing-left">
+                <h1>The hassle-free way to mint NFTs.</h1>
+                <br/>
+                <p>Using meta-transactions and Ethereum's L2 scaling solution, we enable gas-less and blockchain agnostic NFT minting for mass adoption.</p>
+                <br/>
+                <p>Already have a Metamask Wallet? Provide the details for your NFT, sign a transaction and you're done!</p>
+                <br/>
+                <p>Be fearless! Try out the demo below!</p>
+            </div>
+            <div className="landing-right">
+                  
+                  <img src="./artmuseum.svg" id="landingimage"></img>
+                </div>
+          </div>
+        </section>
+        <section className="nft-section">
+          <div className="step">
+            
+            <h3>Step 1 : Input your NFT's details here.</h3>
+            
+            <div className="nft-form">
+            <br/>
+            <form>
+              <div>
+                <label>
+                    NFT Name :
+                <input type="text" name="nftName" />
+                </label>
+                <br/>
+              <label>
+              NFT Data :
+              <textarea name="nftdData" rows="6" cols="45"/>
+                </label>
+                </div>
+                  <br/>
+                <button>Create NFT</button>
+            </form>
+        </div>
+        </div>
+        <div className="step">
+
+        <h3>Step 2 : Check your NFT here.</h3>
+        <div className="nft-results">
+        
+          <div className="results-divider">
+            <div className="results-text">
+              <label>Matic's Mumbai Testnet</label>
+              <h5>Address: 0X12345678790</h5>
+            </div>
+            <div className="link-button">
+          <a href="https://explorer-mumbai.maticvigil.com/" target="_blank">Check</a>
+          </div>
+          </div>
+          </div>
+        </div>
+        
+        </section>
+        
       </div>
     );
   }

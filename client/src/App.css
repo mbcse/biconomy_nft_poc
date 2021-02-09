@@ -1,22 +1,138 @@
-.App {
-  text-align: center;
-}
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 
-.App-logo {
-  height: 40vmin;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  background-color: #fffffe;
+  font-family: "Poppins", sans-serif;
+  color: #272442;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.hero {
   display: flex;
   flex-direction: column;
+  margin: 50px 100px 0 100px;
+}
+.navbar {
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
-
-.App-link {
-  color: #09d3ac;
+#gasimage {
+  width: 40px;
+  height: auto;
+  margin-left: 10px;
+}
+.landing {
+  text-align: left;
+  display: flex;
+  justify-content: space-around;
+  height: 100vh;
+  margin-top: 90px;
+}
+.landing-left {
+  width: 50%;
+}
+.landing-right {
+  width: 40%;
+}
+#landingimage {
+  width: 100%;
+}
+.nft-section {
+  display: flex;
+  justify-content: space-around;
+  height: 100vh;
+  padding: 50px;
+  background-color: #e4f6f5;
+}
+.step {
+  display: flex;
+  flex-direction: column;
+  background-color: #e4f6f5;
+  width: 40%;
+}
+.step h3 {
+  background-color: #e4f6f5;
+  margin-bottom: 10px;
+}
+.nft-form {
+  color: black;
+  background-color: #fffffe;
+  border: solid 3px #e4f6f5;
+  border-radius: 10px;
+  width: 100%;
+  height: 60%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+form {
+  background-color: #fffffe;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+label {
+  display: flex;
+  flex-direction: space-between;
+}
+input {
+  border: none;
+  margin-left: 10px;
+  border-bottom: black solid 1.7px;
+  width: 70%;
+  align-self: flex-end;
+}
+input:invalid {
+  border: 1px solid red;
+}
+:focus {
+  outline: none;
+}
+textarea {
+  margin-left: 20px;
+}
+button,
+a {
+  background-color: #ffd803;
+  text-decoration: none;
+  border: none;
+  border: solid black 3px;
+  border-radius: 5px;
+  padding: 3px 12px 3px 12px;
+  font-size: 15px;
+  width: 50%;
+  margin: 0 auto;
+  text-align: center;
+}
+button:hover,
+a:hover {
+  background-color: yellow;
+  cursor: pointer;
+}
+.nft-results {
+  color: black;
+  background-color: #fffffe;
+  border: solid 3px #e4f6f5;
+  border-radius: 10px;
+  width: 100%;
+  height: 50%;
+  padding: 20px;
+}
+.results-divider {
+  margin-top: 15px;
+  display: flex;
+}
+.results-text {
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+}
+.link-button {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
