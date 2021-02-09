@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import SimpleStorageContract from "./contracts/SimpleStorage.json";
+import BiconomyNftPoc from "./contracts/Biconomy_nft_poc.json";
 import getWeb3 from "./getWeb3";
 
 import "./App.css";
@@ -9,24 +9,25 @@ class App extends Component {
 
   componentDidMount = async () => {
     try {
+
       // Get network provider and web3 instance.
       const web3 = await getWeb3();
 
       // Use web3 to get the user's accounts.
       const accounts = await web3.eth.getAccounts();
+      this.setState({ account: accounts[0] })
+      console.log("Using account: " + this.state.account)
 
       // Get the contract instance.
-      const networkId = await web3.eth.net.getId();
-      const deployedNetwork = SimpleStorageContract.networks[networkId];
-      const instance = new web3.eth.Contract(
-        SimpleStorageContract.abi,
+      const networkId = await web3.eth.net.getId()
+      const deployedNetwork = BiconomyNftPoc.networks[networkId];
+      const contract = new web3.eth.Contract(
+        BiconomyNftPoc.abi,
         deployedNetwork && deployedNetwork.address
       );
 
       // Set web3, accounts, and contract to the state, and then proceed with an
-      // example of interacting with the contract's methods.
-
-      this.setState({ web3, accounts, contract: instance }, this.runExample);
+      this.setState({ web3, accounts, contract: contract });
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -51,6 +52,17 @@ class App extends Component {
     */
   };
 
+  // calling the contracts mint nft method
+  mint = (hash) => {
+   this.state.contract.methods.mint(hash).send({ from: this.state.account })
+   .once('receipt', (receipt) => {
+     this.setState({
+      hashes: [...this.state.hashes, hash]
+     })
+   })
+   console.log("mint is done")
+  }
+
   render() {
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
@@ -59,7 +71,7 @@ class App extends Component {
       <div className="App">
         <section className="hero">
           <div className="navbar">
-            <h1>Fearless Minter</h1> 
+            <h1>Fearless Minter</h1>
             <img id="gasimage" src="./gas.png" ></img>
           </div>
           <div className="landing">
@@ -73,19 +85,23 @@ class App extends Component {
                 <p>Be fearless! Try out the demo below!</p>
             </div>
             <div className="landing-right">
-                  
+
                   <img src="./artmuseum.svg" id="landingimage"></img>
                 </div>
           </div>
         </section>
         <section className="nft-section">
           <div className="step">
-            
+
             <h3>Step 1 : Input your NFT's details here.</h3>
-            
+
             <div className="nft-form">
             <br/>
-            <form>
+            <form onSubmit={(event) => {
+                event.preventDefault()
+                const hash = this.hash.value
+                this.mint(hash)
+              }}>
               <div>
                 <label>
                     NFT Name :
@@ -98,7 +114,13 @@ class App extends Component {
                 </label>
                 </div>
                   <br/>
-                <button>Create NFT</button>
+                  <input
+                    type='text'
+                    className='form-control mb-1'
+                    placeholder='enter file hash e.g. ECEA058EF4523'
+                    ref={(input) => { this.hash = input }}
+                  />
+                <button type="submit">Create NFT</button>
             </form>
         </div>
         </div>
@@ -106,7 +128,7 @@ class App extends Component {
 
         <h3>Step 2 : Check your NFT here.</h3>
         <div className="nft-results">
-        
+
           <div className="results-divider">
             <div className="results-text">
               <label>Matic's Mumbai Testnet</label>
@@ -118,9 +140,9 @@ class App extends Component {
           </div>
           </div>
         </div>
-        
+
         </section>
-        
+
       </div>
     );
   }
