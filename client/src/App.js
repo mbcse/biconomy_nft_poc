@@ -1,8 +1,15 @@
 import React, { Component } from "react";
 import BiconomyNftPoc from "./contracts/Biconomy_nft_poc.json";
-import getWeb3 from "./getWeb3";
-
+// import getWeb3 from "./getWeb3";
+import Portis from '@portis/web3';
+import Web3 from 'web3';
 import "./App.css";
+
+
+const portis = new Portis('b63160c9-8f23-4219-b970-9834bfc99b7e', 'mainnet');
+
+
+
 
 class App extends Component {
   state = { storageValue: 0, web3: null, accounts: null, contract: null };
@@ -11,8 +18,8 @@ class App extends Component {
     try {
 
       // Get network provider and web3 instance.
-      const web3 = await getWeb3();
-
+      // const web3 = await getWeb3();
+      const web3 = new Web3(portis.provider);
       // Use web3 to get the user's accounts.
       const accounts = await web3.eth.getAccounts();
       this.setState({ account: accounts[0] })
