@@ -71,7 +71,7 @@ class App extends Component {
       <div className="App">
         <section className="hero">
           <div className="navbar">
-            <h1>Fearless Minter</h1>
+            <h1>Gasless Minter</h1>
             <img id="gasimage" src="./gas.png" ></img>
           </div>
           <div className="landing">
@@ -80,9 +80,9 @@ class App extends Component {
                 <br/>
                 <p>Using meta-transactions and Ethereum's L2 scaling solution, we enable gas-less and blockchain agnostic NFT minting for mass adoption.</p>
                 <br/>
-                <p>Already have a Metamask Wallet? Provide the details for your NFT, sign a transaction and you're done!</p>
+                <p>Already have a Metamask Wallet? Provide the details for your NFT, sign and you're done!</p>
                 <br/>
-                <p>Be fearless! Try out the demo below!</p>
+                <p>Be gasless! Try out the demo below!</p>
             </div>
             <div className="landing-right">
 
