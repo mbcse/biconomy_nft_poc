@@ -30,7 +30,7 @@ class App extends Component {
       const deployedNetwork = BiconomyNftPoc.networks[networkId];
       const contract = new web3.eth.Contract(
         BiconomyNftPoc.abi,
-        deployedNetwork && deployedNetwork.address
+        "0xaAf6BDBD9473018718c31DB5Ab1519fEF4d51625"
       );
 
       // Set web3, accounts, and contract to the state, and then proceed with an
