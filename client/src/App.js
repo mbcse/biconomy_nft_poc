@@ -4,22 +4,35 @@ import BiconomyNftPoc from "./contracts/Biconomy_nft_poc.json";
 import Portis from '@portis/web3';
 import Web3 from 'web3';
 import "./App.css";
+import Biconomy from "@biconomy/mexa";
 
-
+// Connects portis
 const portis = new Portis('b63160c9-8f23-4219-b970-9834bfc99b7e', 'mainnet');
 
+// Connects and initialize Biconomy mexa
 
-
+/* const biconomy = new Biconomy(portis.provider,{apiKey: <API Key>});
+web3 = new Web3(biconomy); */
 
 class App extends Component {
   state = { storageValue: 0, web3: null, accounts: null, contract: null };
+
+  //Initialize dapp after mexa initialized
+      /* biconomy.onEvent(biconomy.READY, () => {
+        // Initialize your dapp here, insert componentDidMount here?
+       }).onEvent(biconomy.ERROR, (error, message) => {
+        // Handle error while initializing mexa
+       }); */
 
   componentDidMount = async () => {
     try {
 
       // Get network provider and web3 instance.
       // const web3 = await getWeb3();
-      const web3 = new Web3(portis.provider);
+      /** 
+      *@notice need to change web3 to new Web3(biconomy) once apikey provided.;
+      */
+      const web3 = new Web3(portis.provider); 
       // Use web3 to get the user's accounts.
       const accounts = await web3.eth.getAccounts();
       this.setState({ account: accounts[0] })
@@ -35,6 +48,7 @@ class App extends Component {
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       this.setState({ web3, accounts, contract: contract });
+
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -42,21 +56,6 @@ class App extends Component {
       );
       console.error(error);
     }
-  };
-
-  runExample = async () => {
-    /*
-    const { accounts, contract } = this.state;
-
-    // Stores a given value, 5 by default.
-    await contract.methods.set(5).send({ from: accounts[0] });
-
-    // Get the value from the contract to prove it worked.
-    const response = await contract.methods.get().call();
-
-    // Update state with the result.
-    this.setState({ storageValue: response });
-    */
   };
 
   // calling the contracts mint nft method
