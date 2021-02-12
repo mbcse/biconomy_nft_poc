@@ -5,6 +5,7 @@
   "dependencies": {
     "@biconomy/mexa": "^2.0.1",
     "@portis/web3": "^3.0.8",
+    "eth-sig-util": "^3.0.1",
     "react": "16.11.0",
     "react-dom": "16.11.0",
     "react-scripts": "3.2.0",

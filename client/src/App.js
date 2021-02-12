@@ -4,10 +4,12 @@ import BiconomyNftPoc from "./contracts/Biconomy_nft_poc.json";
 import Portis from '@portis/web3';
 import Web3 from 'web3';
 import "./App.css";
-import Biconomy from "@biconomy/mexa";
+import {Biconomy} from "@biconomy/mexa";
+let sigUtil = require("eth-sig-util");
 
 // Connects portis
-const portis = new Portis('b63160c9-8f23-4219-b970-9834bfc99b7e', 'mainnet');
+const portis = new Portis('b63160c9-8f23-4219-b970-9834bfc99b7e', 'kovan');
+const biconomy = new Biconomy(new Web3.providers.HttpProvider("https://rpc-mumbai.maticvigil.com/"),{apiKey: "lO1-9jiPG.f336a50c-ff5f-468e-a254-65b2ed72b955", debug: true });
 
 // Connects and initialize Biconomy mexa
 
@@ -33,21 +35,36 @@ class App extends Component {
       *@notice need to change web3 to new Web3(biconomy) once apikey provided.;
       */
       const web3 = new Web3(portis.provider); 
-      // Use web3 to get the user's accounts.
-      const accounts = await web3.eth.getAccounts();
-      this.setState({ account: accounts[0] })
-      console.log("Using account: " + this.state.account)
+      this.setState({ web3: web3 });
 
+      biconomy.onEvent(biconomy.READY, async() => {
+        const bicoweb3 = new Web3(biconomy);
+        this.setState({ bicoweb3: bicoweb3 });
+        const contract = new bicoweb3.eth.Contract(
+          BiconomyNftPoc.abi,
+          "0x085f8a60D354e7DA3DE6910AE27F7701FBfb5436"
+        );
+        console.log(contract);
+        // Use web3 to get the user's accounts.
+        const accounts = await web3.eth.getAccounts();
+        this.setState({ account: accounts[0] });
+        console.log("Using account: " + this.state.account);
+
+        // Set web3, accounts, and contract to the state, and then proceed with an
+        this.setState({ accounts:accounts, contract: contract });
+
+      }).onEvent(biconomy.ERROR, (error, message) => {
+        console.log("Biconomy Initialization Error");
+      });
+      
+      
+      console.log("State is",this.state);
       // Get the contract instance.
-      const networkId = await web3.eth.net.getId()
-      const deployedNetwork = BiconomyNftPoc.networks[networkId];
-      const contract = new web3.eth.Contract(
-        BiconomyNftPoc.abi,
-        "0xaAf6BDBD9473018718c31DB5Ab1519fEF4d51625"
-      );
+      // const networkId = await web3.eth.net.getId()
+      // const deployedNetwork = BiconomyNftPoc.networks[networkId];
+      
 
-      // Set web3, accounts, and contract to the state, and then proceed with an
-      this.setState({ web3, accounts, contract: contract });
+      
 
     } catch (error) {
       // Catch any errors for any of the above operations.
@@ -59,14 +76,77 @@ class App extends Component {
   };
 
   // calling the contracts mint nft method
-  mint = (hash) => {
-   this.state.contract.methods.mint(hash).send({ from: this.state.account })
-   .once('receipt', (receipt) => {
-     this.setState({
-      hashes: [...this.state.hashes, hash]
-     })
-   })
-   console.log("mint is done")
+  mint = async(hash) => {
+    console.log(this.state.web3.utils.toHex(210000));
+    let privateKey="1c4179968de4655ebe40e9cf90c2b94c5cb8b14dd6ada4a8e8f3a85228ab515f";
+    let txParams = {
+      "from": this.state.account,
+      "gasLimit": this.state.web3.utils.toHex(210000),
+      "to": "0x085f8a60D354e7DA3DE6910AE27F7701FBfb5436",
+      "value": "0x0",
+      "data": this.state.contract.methods.mint(hash).encodeABI()
+    }; 
+    
+    const signedTx = await this.state.web3.eth.accounts.signTransaction(
+      txParams,
+      `0x${privateKey}`
+    );
+    console.log(signedTx);
+
+    const dataToSign = await biconomy.getForwardRequestAndMessageToSign(
+      signedTx.rawTransaction
+    );
+
+    
+    const signature = sigUtil.signTypedMessage(
+      new Buffer.from(privateKey, "hex"),
+      {
+        data: dataToSign.eip712Format, // option to get personalFormat also 
+      },
+      "V4"
+    );
+    
+
+    let rawTransaction = signedTx.rawTransaction;
+    
+    
+    let data = {
+      forwardRequest: dataToSign.request,
+      signature: signature,
+      rawTransaction: rawTransaction,
+      signatureType: "EIP712_SIGN",
+    };
+
+    // Use any one of the methods below to check for transaction confirmation
+    // USING PROMISE
+    /*let receipt = await web3.eth.sendSignedTransaction(data, (error, txHash) => {
+            if (error) {
+                return console.error(error);
+            }
+            console.log(txHash);
+        })*/
+
+    // USING event emitter    
+    
+    let tx = this.state.bicoweb3.eth.sendSignedTransaction(data);
+    console.log("Getting Signature");
+    tx.on("transactionHash", function (hash) {
+      console.log(`Transaction hash is ${hash}`);
+    }).once("confirmation", function (confirmationNumber, receipt) {
+      console.log(receipt);
+    });
+
+    tx.on("error",(err)=>{
+      console.log(err);
+    });
+  
+  //  this.state.contract.methods.mint(hash).send({ from: this.state.account })
+  //  .once('receipt', (receipt) => {
+  //    this.setState({
+  //     hashes: [...this.state.hashes, hash]
+  //    })
+  //  })
+  //  console.log("mint is done")
   }
 
   render() {
@@ -109,23 +189,22 @@ class App extends Component {
                 this.mint(hash)
               }}>
               <div>
-                <label>
+                {/* <label>
                     NFT Name :
                 <input type="text" name="nftName" />
                 </label>
-                <br/>
+                <br/> */}
               <label>
               NFT Data :
-              <textarea name="nftdData" rows="6" cols="45"/>
-                </label>
-                </div>
-                  <br/>
-                  <input
+              <input
                     type='text'
                     className='form-control mb-1'
                     placeholder='enter file hash e.g. ECEA058EF4523'
                     ref={(input) => { this.hash = input }}
                   />
+                </label>
+                </div>
+                  <br/>
                 <button type="submit">Create NFT</button>
             </form>
         </div>
@@ -137,8 +216,8 @@ class App extends Component {
 
           <div className="results-divider">
             <div className="results-text">
-              <label>Matic's Mumbai Testnet</label>
-              <h5>Address: 0X12345678790</h5>
+            <label>Matic's Mumbai Testnet</label>
+            <h5>NFT Smart Contract Address: 0xaAf6BDBD9473018718c31DB5Ab1519fEF4d51625</h5>
             </div>
             <div className="link-button">
           <a href="https://explorer-mumbai.maticvigil.com/" target="_blank">Check</a>
