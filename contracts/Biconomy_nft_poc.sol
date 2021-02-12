@@ -24,8 +24,13 @@ contract Biconomy_nft_poc is ERC1155, Ownable, BaseRelayRecipient {
     event NFTMinted(address creator, uint256 tokenId);
 
     constructor() public ERC1155("https://exampleurl/tokenmetadata/{id}.json") {
-      trustedForwarder = 0x2B99251eC9650e507936fa9530D11dE4d6C9C05c;
+      trustedForwarder = 0x4D373d1B9a0367219a5f6547B8DfaC39f846F6a9;
     }
+
+    function setTrustedForwarder(address _trustedForwarder) public {
+      trustedForwarder = _trustedForwarder;
+    }
+
 
     /**
      * @notice Mints a new NFT
@@ -109,4 +114,6 @@ contract Biconomy_nft_poc is ERC1155, Ownable, BaseRelayRecipient {
               return msg.data;
           }
       }
+
+
 }
