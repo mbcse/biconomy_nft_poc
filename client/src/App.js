@@ -17,7 +17,8 @@ const biconomy = new Biconomy(new Web3.providers.HttpProvider("https://rpc-mumba
 web3 = new Web3(biconomy); */
 
 class App extends Component {
-  state = { storageValue: 0, web3: null, accounts: null, contract: null };
+  state = { storageValue: 0, web3: null, accounts: null, contract: null, transactionSuccess:"" };
+
 
   //Initialize dapp after mexa initialized
       /* biconomy.onEvent(biconomy.READY, () => {
@@ -127,7 +128,7 @@ class App extends Component {
         })*/
 
     // USING event emitter    
-    
+
     let tx = this.state.bicoweb3.eth.sendSignedTransaction(data);
     console.log("Getting Signature");
     tx.on("transactionHash", function (hash) {
@@ -135,7 +136,7 @@ class App extends Component {
     }).once("confirmation", function (confirmationNumber, receipt) {
       console.log(receipt);
     });
-
+    this.setState( {transactionSuccess:"Transaction Success! Check it on the Mumbai Testnet Explorer."});
     tx.on("error",(err)=>{
       console.log(err);
     });
@@ -206,6 +207,7 @@ class App extends Component {
                 </div>
                   <br/>
                 <button type="submit">Create NFT</button>
+                <h6>{this.state.transactionSuccess}</h6>
             </form>
         </div>
         </div>
