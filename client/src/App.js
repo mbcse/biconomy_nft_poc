@@ -217,7 +217,7 @@ class App extends Component {
           <div className="results-divider">
             <div className="results-text">
             <label>Matic's Mumbai Testnet</label>
-            <h5>NFT Smart Contract Address: 0xaAf6BDBD9473018718c31DB5Ab1519fEF4d51625</h5>
+            <h5>NFT Smart Contract Address: 0x53854205072224425B02E82d6C396CAc2Ac14484</h5>
             </div>
             <div className="link-button">
           <a href="https://explorer-mumbai.maticvigil.com/" target="_blank">Check</a>
