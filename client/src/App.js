@@ -42,7 +42,7 @@ class App extends Component {
         this.setState({ bicoweb3: bicoweb3 });
         const contract = new bicoweb3.eth.Contract(
           BiconomyNftPoc.abi,
-          "0x085f8a60D354e7DA3DE6910AE27F7701FBfb5436"
+          "0x53854205072224425B02E82d6C396CAc2Ac14484"
         );
         console.log(contract);
         // Use web3 to get the user's accounts.
@@ -82,7 +82,7 @@ class App extends Component {
     let txParams = {
       "from": this.state.account,
       "gasLimit": this.state.web3.utils.toHex(210000),
-      "to": "0x085f8a60D354e7DA3DE6910AE27F7701FBfb5436",
+      "to": "0x53854205072224425B02E82d6C396CAc2Ac14484",
       "value": "0x0",
       "data": this.state.contract.methods.mint(hash).encodeABI()
     }; 
